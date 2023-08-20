@@ -1,6 +1,6 @@
 # 数据库初始化
-# @author <a href="https://github.com/liyupi">程序员鱼皮</a>
-# @from <a href="https://yupi.icu">编程导航知识星球</a>
+# @author zhj
+#
 
 -- 创建库
 create database if not exists my_db;
@@ -25,6 +25,19 @@ create table if not exists user
     isDelete     tinyint      default 0                 not null comment '是否删除',
     index idx_unionId (unionId)
 ) comment '用户' collate = utf8mb4_unicode_ci;
+
+-- 插入示例1
+INSERT INTO user (userAccount, userPassword, userRole, userName)
+VALUES ('example1', 'password1', 'user', '张三');
+
+-- 插入示例2
+INSERT INTO user (userAccount, userPassword, userName, userAvatar, userProfile, userRole)
+VALUES ('example2', 'password2', '李四', '头像.jpg', '大家好，我是李四！', 'user');
+
+-- 插入示例3
+INSERT INTO user (userAccount, userPassword, unionId, mpOpenId, userName, userAvatar, userProfile, userRole)
+VALUES ('example3', 'password3', '1234567890', 'openid123', '王五', '头像.png', '欢迎来到我的个人简介！', 'admin');
+
 
 -- 帖子表
 create table if not exists post
