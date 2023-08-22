@@ -7,6 +7,8 @@ import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.zhj.search.common.ErrorCode;
+import com.zhj.search.dataSource.DataSource;
+import com.zhj.search.dataSource.DataSourceRegistry;
 import com.zhj.search.esdao.PostEsDao;
 import com.zhj.search.exception.BusinessException;
 import com.zhj.search.model.dto.post.PostEsDTO;
@@ -22,6 +24,7 @@ import org.jsoup.select.Elements;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.ApplicationContext;
 
 import javax.annotation.Resource;
 import java.io.IOException;
@@ -206,9 +209,9 @@ public class CrawlerTest {
             //Map<String, String> artists = tempRecord.getBean("artists", Map.class);
             //tempRecord.getBeanList("artists",List.class)
             String json = tempRecord.getBeanList("artists", String.class).get(0);
-            Map<String,String> artists = JSONUtil.toBean(json, Map.class);
+            Map<String, String> artists = JSONUtil.toBean(json, Map.class);
             music.setAuthor(artists.get("name"));
-            Map<String,String> album = tempRecord.getBean("album", Map.class);
+            Map<String, String> album = tempRecord.getBean("album", Map.class);
             music.setPicUrl(album.get("blurPicUrl"));
             music.setMp3Url(tempRecord.getStr("mp3Url"));
             System.out.println(music);
@@ -220,14 +223,13 @@ public class CrawlerTest {
     }
 
 
-
     @Test
-    public void testFetchVideo(){
-        int pageNum=1;
-        int pageSize=50;
-        String searchText="假面骑士";
+    public void testFetchVideo() {
+        int pageNum = 1;
+        int pageSize = 50;
+        String searchText = "假面骑士";
         String url1 = "https://www.bilibili.com/";
-        String url2 = String.format("https://api.bilibili.com/x/web-interface/search/type?search_type=video&keyword=%s&page=%s&page_size=%s",searchText,pageNum,pageSize);
+        String url2 = String.format("https://api.bilibili.com/x/web-interface/search/type?search_type=video&keyword=%s&page=%s&page_size=%s", searchText, pageNum, pageSize);
         HttpCookie cookie = HttpRequest.get(url1).execute().getCookie("buvid3");
 
         //String body = null;
@@ -243,22 +245,22 @@ public class CrawlerTest {
                 .execute().body();
 
         Map map = JSONUtil.toBean(body, Map.class);
-        Map data = (Map)map.get("data");
+        Map data = (Map) map.get("data");
         JSONArray videoList = (JSONArray) data.get("result");
-        Page<Video> page = new Page<>(pageNum,pageSize);
+        Page<Video> page = new Page<>(pageNum, pageSize);
         List<Video> VideoList = new ArrayList<>();
-        for(Object video:videoList){
-            JSONObject tempVideo = (JSONObject)video;
+        for (Object video : videoList) {
+            JSONObject tempVideo = (JSONObject) video;
             Video Video = new Video();
             Video.setUpic(tempVideo.getStr("upic"));
             Video.setAuthor(tempVideo.getStr("author"));
             Video.setPubdate(tempVideo.getInt("pubdate"));
             Video.setArcurl(tempVideo.getStr("arcurl"));
-            Video.setPic("http:"+tempVideo.getStr("pic"));
+            Video.setPic("http:" + tempVideo.getStr("pic"));
             Video.setTitle(tempVideo.getStr("title"));
             Video.setDescription(tempVideo.getStr("description"));
             VideoList.add(Video);
-            if(VideoList.size()>=pageSize){
+            if (VideoList.size() >= pageSize) {
                 break;
             }
         }
@@ -266,7 +268,7 @@ public class CrawlerTest {
     }
 
     @Test
-    public void test(){
+    public void test() {
         // 1. 抓取数据
         String json = "{\"id_type\":2,\"client_type\":2608,\"sort_type\":200,\"cursor\":\"0\",\"limit\":20}";
         String result = HttpRequest.post("https://api.juejin.cn/recommend_api/v1/article/recommend_all_feed?aid=2608&uuid=7123262301927228965&spider=0")
@@ -308,6 +310,31 @@ public class CrawlerTest {
 //        System.out.println(postList);
         // 3. 数据入库
         boolean b = postService.saveBatch(postList);
+    }
+
+    @Resource
+    private ApplicationContext applicationContext;
+
+    @Resource
+    private DataSourceRegistry dataSourceRegistry;
+
+    //测试工厂模式和注册器模式的性能
+    //各自创建100000次耗时
+    @Test
+    public void test1() {
+        //先测试工厂模式
+        long start = System.currentTimeMillis();
+        for (int i = 0; i < 1000000; i++) {
+            DataSource post_service = applicationContext.getBean("post_dataSource", DataSource.class);
+        }
+        long mid = System.currentTimeMillis();
+        System.out.println("工厂模式耗时：" + (mid - start) + "ms");
+        for (int i = 0; i < 1000000; i++) {
+            DataSource post = dataSourceRegistry.getDataSourceByType("post");
+        }
+        long end = System.currentTimeMillis();
+        System.out.println("注册器模式耗时：" + (end - mid) + "ms");
+
     }
 
 
