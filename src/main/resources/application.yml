@@ -21,7 +21,8 @@ spring:
   # todo 需替换配置
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://192.168.101.65:3306/my_db
+#    url: jdbc:mysql://192.168.101.65:3306/my_db
+    url: jdbc:mysql://43.138.17.148:3306/my_db
     username: root
     password: mysql
   # Redis 配置
@@ -35,7 +36,8 @@ spring:
   # Elasticsearch 配置
   # todo 需替换配置，然后取消注释
   elasticsearch:
-    uris: http://192.168.101.65:9200
+#    uris: http://192.168.101.65:9200
+    uris: http://43.138.17.148:9200
     username: root
     password: 123456
 server:
@@ -59,4 +61,5 @@ mybatis-plus:
 
 canal:
   destination: api # canal实例名称，要跟canal-server运行时设置的destination一致
-  server: 192.168.101.65:11111 # canal地址
+#  server: 192.168.101.65:11111 # canal地址
+  server: 43.138.17.148:11111 # canal地址

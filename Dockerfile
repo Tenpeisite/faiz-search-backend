@@ -5,7 +5,7 @@ ENV APP_PATH=/app
 #设置工作目录
 WORKDIR $APP_PATH
 #将jar包导入新的镜像
-ADD API-backend-1.0-SNAPSHOT.jar $APP_PATH/apps.jar
+ADD search-backend-0.0.1-SNAPSHOT.jar $APP_PATH/apps.jar
 #暴露端口
 EXPOSE 8102
 ENTRYPOINT ["java","-jar"]

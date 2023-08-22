@@ -28,7 +28,7 @@ import org.springframework.stereotype.Component;
  * @author zhj
  */
 // todo 取消注释开启任务
-//@Component
+@Component
 @Slf4j
 public class IncSyncPostToEs {
 
@@ -45,8 +45,7 @@ public class IncSyncPostToEs {
     /**
      * 每天晚上三点拉取数据
      */
-    @Scheduled(cron = "0 3 * * *")
-    //@Scheduled(fixedRate = 60 * 1000)
+    @Scheduled(cron = "0 0 3 * * *")
     public void task() {
         // 1. 抓取数据
         String json = "{\"id_type\":2,\"client_type\":2608,\"sort_type\":200,\"cursor\":\"0\",\"limit\":20}";
