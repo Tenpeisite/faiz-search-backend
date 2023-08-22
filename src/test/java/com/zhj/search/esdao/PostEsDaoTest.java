@@ -86,4 +86,9 @@ public class PostEsDaoTest {
         List<PostEsDTO> postEsDTOS = postEsDao.findByTitle("test");
         System.out.println(postEsDTOS);
     }
+
+    @Test
+    void testDeleteById(){
+        postEsDao.deleteById(1L);
+    }
 }

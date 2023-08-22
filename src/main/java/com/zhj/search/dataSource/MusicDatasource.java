@@ -5,6 +5,8 @@ import cn.hutool.json.JSONArray;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.zhj.search.common.ErrorCode;
+import com.zhj.search.exception.BusinessException;
 import com.zhj.search.model.entity.Music;
 import org.springframework.stereotype.Service;
 
@@ -41,6 +43,9 @@ public class MusicDatasource implements DataSource {
         JSONArray songs = (JSONArray) data.get("songs");
         Page<Music> page = new Page<>(pageNum, pageSize);
         List<Music> records = new ArrayList<>();
+        if(songs.isEmpty()){
+            throw new BusinessException(ErrorCode.SYSTEM_ERROR,"搜索词不能为空");
+        }
         for (Object song : songs) {
             JSONObject tempRecord = (JSONObject) song;
             Music music = new Music();

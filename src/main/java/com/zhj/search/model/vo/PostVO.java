@@ -2,8 +2,10 @@ package com.zhj.search.model.vo;
 
 import com.alibaba.fastjson.JSON;
 import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.zhj.search.model.entity.Post;
+
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
@@ -15,7 +17,6 @@ import org.springframework.beans.BeanUtils;
  * 帖子视图
  *
  * @author zhj
- * 
  */
 @Data
 public class PostVO implements Serializable {
@@ -114,9 +115,13 @@ public class PostVO implements Serializable {
         PostVO postVO = new PostVO();
         BeanUtils.copyProperties(post, postVO);
         String tags = post.getTags();
-        tags=tags.replaceAll(" ","");
-        postVO.setTagList(GSON.fromJson(tags, new TypeToken<List<String>>() {
-        }.getType()));
+        try {
+            tags = tags.replaceAll(" ", "");
+            postVO.setTagList(GSON.fromJson(tags, new TypeToken<List<String>>() {
+            }.getType()));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return postVO;
     }
 }
