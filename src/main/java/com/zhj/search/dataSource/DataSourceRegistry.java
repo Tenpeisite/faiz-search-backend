@@ -1,7 +1,6 @@
 package com.zhj.search.dataSource;
 
 import com.zhj.search.model.enums.SearchTypeEnum;
-import org.apache.poi.ss.formula.functions.T;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
 
@@ -29,7 +28,14 @@ public class DataSourceRegistry {
     @Resource
     private PictureDatasource pictureDatasource;
 
-    private Map<String, DataSource<T>> typeDataSourceMap;
+    @Resource
+    private VideoDatasource videoDatasource;
+
+    @Resource
+    private MusicDatasource musicDatasource;
+
+    private Map<String, DataSource> typeDataSourceMap;
+
 
     @PostConstruct
     public void doInit() {
@@ -37,6 +43,8 @@ public class DataSourceRegistry {
             put(SearchTypeEnum.POST.getValue(), postDatasource);
             put(SearchTypeEnum.USER.getValue(), userDatasource);
             put(SearchTypeEnum.PICTURE.getValue(), pictureDatasource);
+            put(SearchTypeEnum.VIDEO.getValue(), videoDatasource);
+            put(SearchTypeEnum.MUSIC.getValue(), musicDatasource);
         }};
 
     }

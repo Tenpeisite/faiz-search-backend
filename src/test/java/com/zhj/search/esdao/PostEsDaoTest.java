@@ -50,8 +50,8 @@ public class PostEsDaoTest {
     @Test
     void testAdd() {
         PostEsDTO postEsDTO = new PostEsDTO();
-        postEsDTO.setId(2L);
-        postEsDTO.setTitle("假面骑士Faiz");
+        postEsDTO.setId(3L);
+        postEsDTO.setTitle("Faiz");
         postEsDTO.setContent("我最喜欢的假面骑士就是Faiz");
         postEsDTO.setTags(Arrays.asList("java", "python"));
         //postEsDTO.setThumbNum(1);

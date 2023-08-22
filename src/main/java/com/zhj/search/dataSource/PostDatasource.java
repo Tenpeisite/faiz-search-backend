@@ -23,20 +23,6 @@ import com.zhj.search.service.PostService;
 import com.zhj.search.service.UserService;
 import com.zhj.search.utils.SqlUtils;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.lang3.ObjectUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.elasticsearch.index.query.BoolQueryBuilder;
-import org.elasticsearch.index.query.QueryBuilders;
-import org.elasticsearch.search.sort.SortBuilder;
-import org.elasticsearch.search.sort.SortBuilders;
-import org.elasticsearch.search.sort.SortOrder;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.elasticsearch.core.ElasticsearchRestTemplate;
-import org.springframework.data.elasticsearch.core.SearchHit;
-import org.springframework.data.elasticsearch.core.SearchHits;
-import org.springframework.data.elasticsearch.core.query.NativeSearchQuery;
-import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -63,14 +49,14 @@ public class PostDatasource implements DataSource<PostVO> {
     public Page<PostVO> doSearch(String searchText, long pageNum, long pageSize) {
         PostQueryRequest postQueryRequest = new PostQueryRequest();
         postQueryRequest.setContent(searchText);
-        //postQueryRequest.setSearchText(searchText);
+        postQueryRequest.setSearchText(searchText);
         postQueryRequest.setCurrent(pageNum);
         postQueryRequest.setPageSize(pageSize);
-        ServletRequestAttributes servletRequestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
-        HttpServletRequest request = servletRequestAttributes.getRequest();
+        //ServletRequestAttributes servletRequestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+        //HttpServletRequest request = servletRequestAttributes.getRequest();
         //Page<PostVO> postVOPage = postService.listPostVOByPage(postQueryRequest, request);
         Page<Post> postVOPage = postService.searchFromEs(postQueryRequest);
-        return postService.getPostVOPage(postVOPage, request);
+        return postService.getPostVOPage(postVOPage, null);
     }
 }
 

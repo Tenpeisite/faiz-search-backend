@@ -1,14 +1,15 @@
 package com.zhj.search.model.dto.post;
 
+import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
 import com.zhj.search.model.entity.Post;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import lombok.Data;
-import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.annotation.Id;
@@ -93,6 +94,10 @@ public class PostEsDTO implements Serializable {
             }.getType()));
         }
         return postEsDTO;
+    }
+
+    public static List<PostEsDTO> objToDtoList(List<Post> postList){
+        return postList.stream().map(PostEsDTO::objToDto).collect(Collectors.toList());
     }
 
     /**

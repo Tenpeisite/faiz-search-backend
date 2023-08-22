@@ -18,7 +18,6 @@ import com.zhj.search.service.PostService;
 import com.zhj.search.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.poi.ss.formula.functions.T;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -58,7 +57,7 @@ public class SearchFacade {
     public SearchVO searchAll(@RequestBody SearchRequest searchRequest, HttpServletRequest request) {
         String type = searchRequest.getType();
         SearchTypeEnum searchTypeEnum = SearchTypeEnum.getEnumByValue(type);
-        ThrowUtils.throwIf(StringUtils.isBlank(type), ErrorCode.FORBIDDEN_ERROR);
+        //ThrowUtils.throwIf(StringUtils.isBlank(type), ErrorCode.FORBIDDEN_ERROR);
         //搜索词
         String searchText = searchRequest.getSearchText();
         //页码
@@ -104,14 +103,14 @@ public class SearchFacade {
             }
         } else {
             //注册器模式
-            //DataSource dataSource = dataSourceRegistry.getDataSourceByType(type);
+            DataSource dataSource = dataSourceRegistry.getDataSourceByType(type);
 
             //或者是工厂模式
-            DataSource dataSource = applicationContext.getBean(type + "_dataSource", DataSource.class);
+            //DataSource dataSource = applicationContext.getBean(type + "_dataSource", DataSource.class);
 
             //整合
             SearchVO searchVO = new SearchVO();
-            Page<T> page = dataSource.doSearch(searchText, current, pageSize);
+            Page page = dataSource.doSearch(searchText, current, pageSize);
             searchVO.setDataList(page.getRecords());
             return searchVO;
         }

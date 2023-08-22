@@ -1,5 +1,6 @@
 package com.zhj.search.model.vo;
 
+import com.alibaba.fastjson.JSON;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.zhj.search.model.entity.Post;
@@ -112,7 +113,9 @@ public class PostVO implements Serializable {
         }
         PostVO postVO = new PostVO();
         BeanUtils.copyProperties(post, postVO);
-        postVO.setTagList(GSON.fromJson(post.getTags(), new TypeToken<List<String>>() {
+        String tags = post.getTags();
+        tags=tags.replaceAll(" ","");
+        postVO.setTagList(GSON.fromJson(tags, new TypeToken<List<String>>() {
         }.getType()));
         return postVO;
     }

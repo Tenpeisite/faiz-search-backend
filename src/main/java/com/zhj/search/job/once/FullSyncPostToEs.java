@@ -1,5 +1,6 @@
 package com.zhj.search.job.once;
 
+import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.zhj.search.esdao.PostEsDao;
 import com.zhj.search.model.dto.post.PostEsDTO;
 import com.zhj.search.model.entity.Post;
@@ -9,8 +10,8 @@ import java.util.stream.Collectors;
 import javax.annotation.Resource;
 
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.stereotype.Component;
 
 /**
  * 全量同步帖子到 es
