@@ -21,7 +21,7 @@ import java.util.Map;
  * @author zhj
  * 
  */
-@Component
+//@Component
 @Slf4j
 public class FetchInitPostList implements CommandLineRunner {
 

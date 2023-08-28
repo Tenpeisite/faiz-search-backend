@@ -33,8 +33,8 @@ public class PostHandler implements EntryHandler<Post> {
         postEsDao.save(postEsDTO);
     }
 
-    //@Override
-    //public void delete(Post post) {
-    //    EntryHandler.super.delete(post);
-    //}
+    @Override
+    public void delete(Post post) {
+        postEsDao.deleteById(post.getId());
+    }
 }

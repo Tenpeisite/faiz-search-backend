@@ -83,6 +83,8 @@ public class IncSyncPostToEs {
             post.setTitle(article_info.getStr("title"));
             post.setContent(article_info.getStr("brief_content"));
             post.setTags(JSONUtil.toJsonStr(tagList));
+            post.setThumbNum(article_info.getInt("digg_count"));
+            post.setFavourNum(article_info.getInt("collect_count"));
             post.setUserId(1682051319042527234L);
             postList.add(post);
         }

@@ -132,9 +132,18 @@ public class CrawlerTest {
     }
 
 
+    //请求掘金网站文章
     @Test
     void testFetchPost() {
         // 1. 抓取数据
+        //String json = "{\n" +
+        //        "  \"id_type\": 2,\n" +
+        //        "  \"client_type\": 2608,\n" +
+        //        "  \"sort_type\": 300,\n" +
+        //        "  \"cursor\": \"eyJ2IjoiNzI3MjIwMDQwNTI0ODMxMTMzNyIsImkiOjE4MH0=\",\n" +
+        //        "  \"limit\": 20\n" +
+        //        "}";
+        //String result = HttpRequest.post("https://api.juejin.cn/recommend_api/v1/article/recommend_all_feed?aid=2608&uuid=7204751966281729575&spider=0")
         String json = "{\"id_type\":2,\"client_type\":2608,\"sort_type\":200,\"cursor\":\"0\",\"limit\":20}";
         String result = HttpRequest.post("https://api.juejin.cn/recommend_api/v1/article/recommend_all_feed?aid=2608&uuid=7204751966281729575&spider=0")
                 .body(json)
@@ -170,13 +179,23 @@ public class CrawlerTest {
             post.setTitle(article_info.getStr("title"));
             post.setContent(article_info.getStr("brief_content"));
             post.setTags(JSONUtil.toJsonStr(tagList));
+            post.setThumbNum(article_info.getInt("digg_count"));
+            post.setFavourNum(article_info.getInt("collect_count"));
             post.setUserId(1682051319042527234L);
             postList.add(post);
         }
-        System.out.println(postList);
+        //System.out.println(postList);
         // 3. 数据入库
-        boolean b = postService.saveBatch(postList);
-        postEsDao.saveAll(PostEsDTO.objToDtoList(postList));
+        //boolean b = postService.saveBatch(postList);
+        postList.forEach(post -> {
+            try {
+                postService.save(post);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+
+        //postEsDao.saveAll(PostEsDTO.objToDtoList(postList));
     }
 
     @Test

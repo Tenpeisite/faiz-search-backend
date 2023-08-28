@@ -1,14 +1,18 @@
 package com.zhj.search.esdao;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapper;
 import com.zhj.search.model.dto.post.PostEsDTO;
 import com.zhj.search.model.dto.post.PostQueryRequest;
 import com.zhj.search.model.entity.Post;
 import com.zhj.search.service.PostService;
+
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import javax.annotation.Resource;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
@@ -19,7 +23,6 @@ import org.springframework.data.domain.Sort;
  * 帖子 ES 操作测试
  *
  * @author zhj
- * 
  */
 @SpringBootTest
 public class PostEsDaoTest {
@@ -82,13 +85,19 @@ public class PostEsDaoTest {
     }
 
     @Test
-    void testFindByTitle(){
+    void testFindByTitle() {
         List<PostEsDTO> postEsDTOS = postEsDao.findByTitle("test");
         System.out.println(postEsDTOS);
     }
 
     @Test
-    void testDeleteById(){
+    void testDeleteById() {
         postEsDao.deleteById(1L);
+    }
+
+    @Test
+    public void testDeleteAll() {
+        boolean remove = postService.remove(new LambdaQueryWrapper<Post>());
+        //postEsDao.deleteAll();
     }
 }
